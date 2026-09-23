@@ -1,7 +1,9 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import EventForm from "../components/EventForm";
 
-function EventDetailsPage({ events }) {
+function EventDetailsPage({ events, onUpdateEvent, isEditing = false }) {
     const { eventId } = useParams();
+    const navigate = useNavigate();
 
     const selectedEvent = events.find(function (event) {
         return event.id === Number(eventId);
@@ -19,6 +21,21 @@ function EventDetailsPage({ events }) {
                     Back to Events
                 </Link>
             </section>
+        );
+    }
+
+    if (isEditing) {
+        async function handleUpdateAndReturn(updatedEvent) {
+            await onUpdateEvent(updatedEvent);
+            navigate(`/events/${updatedEvent.id}`);
+        }
+
+        return (
+            <EventForm
+                key={selectedEvent.id}
+                eventToEdit={selectedEvent}
+                onUpdateEvent={handleUpdateAndReturn}
+            />
         );
     }
 

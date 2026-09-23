@@ -44,6 +44,21 @@ function App() {
        setEventError("");
     }
 
+    async function handleUpdateEvent(updatedEvent) {
+        const response = await fetch(`http://localhost:5000/api/events/${updatedEvent.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedEvent),
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to update event.");
+        }
+
+        setEvents(await fetchEvents());
+        setEventError("");
+    }
+
     function handleDeleteEvent(eventId) {
        fetch(`http://localhost:5000/api/events/${eventId}`, {
         method: "DELETE"
@@ -83,6 +98,18 @@ function App() {
                         <EventsPage
                             events={events}
                             onDeleteEvent={handleDeleteEvent}
+                            onUpdateEvent={handleUpdateEvent}
+                        />
+                    }
+                />
+
+                <Route
+                    path="/events/:eventId/edit"
+                    element={
+                        <EventDetailsPage
+                            events={events}
+                            onUpdateEvent={handleUpdateEvent}
+                            isEditing
                         />
                     }
                 />

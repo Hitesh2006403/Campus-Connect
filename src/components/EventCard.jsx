@@ -47,6 +47,13 @@ function EventCard({
         View Details
       </Link>
 
+      <Link
+        className="details-button"
+        to={`/events/${id}/edit`}
+      >
+        Edit
+      </Link>
+
       <button
         className="delete-button"
         type="button"
