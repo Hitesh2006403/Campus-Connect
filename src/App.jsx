@@ -1,47 +1,69 @@
-import { useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import { Routes, Route } from "react-router";
-
 import "./App.css";
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import HomePage from "./pages/HomePage";
 import EventsPage from "./pages/EventsPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import AboutPage from "./pages/AboutPage";
 function App() {
     const [events, setEvents] = useState([]);
+    const [eventError, setEventError] = useState("");
 
-     useEffect(()=>{
-        fetch("http://localhost:5000/api/events")
-        .then((response)=>response.json())
-        .then((data)=>{
-            setEvents(data);
-        });
-    }, []);
+    async function fetchEvents() {
+        const response = await fetch("http://localhost:5000/api/events");
 
-    function handleAddEvent(newEvent) {
-        setEvents([...events, newEvent]);
+        if (!response.ok) {
+            throw new Error("Unable to load events.");
+        }
+
+        return response.json();
+    }
+
+    useEffect(()=>{
+            fetchEvents()
+            .then((data) => setEvents(data))
+            .catch(() => {
+                setEventError("The events service is unavailable. Start the backend and try again.");
+            });
+        }, []);
+
+    async function handleAddEvent(newEvent) {
+       const response = await fetch("http://localhost:5000/api/events", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newEvent),
+       });
+
+       if (!response.ok) {
+            throw new Error("Unable to add event.");
+       }
+
+    setEvents(await fetchEvents());
+       setEventError("");
     }
 
     function handleDeleteEvent(eventId) {
-        fetch(`http://localhost:5000/api/events/${eventId}`, {
-            method:"DELETE"
-        }).then((response)=>response.json())
-        .then((data)=>{
-            console.log(data);
-            fetch("http://localhost:5000/api/events")
-            .then((response)=>response.json())
-            .then((data)=>{
-                setEvents(data);
-            });
-        });
+       fetch(`http://localhost:5000/api/events/${eventId}`, {
+        method: "DELETE"
+       })
+       .then((response) => {
+            if (!response.ok) {
+                throw new Error("Unable to delete event.");
+            }
+            return fetchEvents().then((data) => setEvents(data));
+       })
+       .catch(() => {
+            setEventError("The event could not be changed. Check that the backend is running.");
+       });
     }
 
     return (
         <div>
             <Navbar />
+
+            {eventError && <p className="api-error">{eventError}</p>}
 
             <Routes>
                 <Route

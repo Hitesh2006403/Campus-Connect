@@ -22,7 +22,7 @@ function EventForm({ onAddEvent }) {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (
@@ -47,18 +47,20 @@ function EventForm({ onAddEvent }) {
       description: formData.description,
     };
 
-    onAddEvent(newEvent);
-
-    setFormData({
-      title: "",
-      category: "",
-      date: "",
-      time: "",
-      location: "",
-      description: "",
-    });
-
-    setFormError("");
+    try {
+      await onAddEvent(newEvent);
+      setFormData({
+        title: "",
+        category: "",
+        date: "",
+        time: "",
+        location: "",
+        description: "",
+      });
+      setFormError("");
+    } catch {
+      setFormError("Event could not be added. Please check that the backend is running.");
+    }
   }
 
   return (
