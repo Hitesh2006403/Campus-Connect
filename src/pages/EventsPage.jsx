@@ -3,7 +3,7 @@ function EventsPage({ events, onDeleteEvent }) {
    
     return (
         <>
-            <section>
+            <section className="page-heading">
                 <p className="section-label">
                     All Campus Activities
                 </p>
