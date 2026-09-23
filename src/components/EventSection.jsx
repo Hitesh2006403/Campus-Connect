@@ -1,6 +1,5 @@
 import { useState } from "react";
 import EventCard from "./EventCard";
-
 function EventSection({
   events,
   onDeleteEvent,
