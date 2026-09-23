@@ -1,18 +1,42 @@
 import express from "express";
 import cors from "cors";
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 
 const app = express();                  // This is everything the express is called API also passed through it 
 app.use(cors());
 app.use(express.json());
 
-const eventsFilePath = fileURLToPath(new URL("./events.json", import.meta.url));
-let initialEvents = JSON.parse(readFileSync(eventsFilePath, "utf8"));
-
-function saveEvents() {
-  writeFileSync(eventsFilePath, JSON.stringify(initialEvents, null, 2) + "\n");
-}
+const initialEvents = [
+  {
+    id: 1,
+    title: "MERN Stack Workshop",
+    category: "Technology",
+    date: "25 September 2026",
+    time: "10:00 AM",
+    location: "Computer Lab 1",
+    description:
+      "Learn the basics of MongoDB, Express, React, and Node.js through a practical workshop.",
+  },
+  {
+    id: 2,
+    title: "College Hackathon",
+    category: "Technology",
+    date: "28 September 2026",
+    time: "9:00 AM",
+    location: "Main Auditorium",
+    description:
+      "Form a team, solve a real problem, and present your solution to mentors.",
+  },
+  {
+    id: 3,
+    title: "Photography Club Meet",
+    category: "Club",
+    date: "30 September 2026",
+    time: "2:00 PM",
+    location: "Seminar Hall",
+    description:
+      "Meet fellow photography enthusiasts and learn basic composition techniques.",
+  },
+];
 
 
 app.get ("/", (req, res )=>{
@@ -38,14 +62,12 @@ app.delete("/api/events/:id", (req,res)=>{
     }
 
     initialEvents.splice(eventIndex,1);
-    saveEvents();
     res.json({ message: "Event deleted successfully" });
 })
 
 app.post("/api/events", (req, res)=>{
   const newEvent = req.body;
   initialEvents.push(newEvent);
-  saveEvents();
   res.json({
     message: "Event added successfully",
     event: newEvent
@@ -69,7 +91,6 @@ app.put("/api/events/:id", (req, res)=>{
     ...initialEvents[eventIndex],
     ...updatedEvent
   };
-  saveEvents();
 
   res.json({
     message: "Event updated successfully",
