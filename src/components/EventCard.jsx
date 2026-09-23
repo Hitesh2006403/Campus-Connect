@@ -9,6 +9,7 @@ function EventCard({
   category,
   description,
   onDeleteEvent,
+  onStartEdit,
 }) {
   function handleDeleteClick() {
     onDeleteEvent(id);
@@ -47,12 +48,13 @@ function EventCard({
         View Details
       </Link>
 
-      <Link
+      <button
         className="details-button"
-        to={`/events/${id}/edit`}
+        type="button"
+        onClick={() => onStartEdit(id)}
       >
         Edit
-      </Link>
+      </button>
 
       <button
         className="delete-button"

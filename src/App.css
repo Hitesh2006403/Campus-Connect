@@ -238,6 +238,16 @@ button {
   box-shadow: var(--shadow);
 }
 
+.event-form-section {
+  width: min(78%, 980px);
+  margin: 32px auto 24px;
+  padding: 28px 32px 18px;
+
+  background: #f3f4f6;
+  border: 1px solid #dfe4ea;
+  box-shadow: none;
+}
+
 .section-heading {
   display: flex;
 
@@ -449,9 +459,11 @@ button {
 ========================= */
 
 .event-form-section h2 {
-  margin: 4px 0 25px;
+  margin: 6px 0 24px;
 
-  font-size: 28px;
+  font-size: clamp(2rem, 2.2vw, 3.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.05em;
 }
 
 .event-form {
@@ -459,7 +471,7 @@ button {
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 18px;
+  gap: 20px 18px;
 }
 
 .form-group {
@@ -476,7 +488,7 @@ button {
 .form-group label {
   color: var(--text);
 
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -485,15 +497,20 @@ button {
 .form-group textarea {
   width: 100%;
 
-  padding: 12px 13px;
+  padding: 13px 14px;
 
-  border: 1px solid var(--border);
-  border-radius: 9px;
+  border: 1px solid #d7dde6;
+  border-radius: 10px;
 
-  background: white;
+  background: rgba(255, 255, 255, 0.35);
   color: var(--text);
 
   outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
 }
 
 .form-group input:focus,
@@ -506,7 +523,7 @@ button {
 }
 
 .form-group textarea {
-  min-height: 120px;
+  min-height: 150px;
 
   resize: vertical;
 }
@@ -534,10 +551,10 @@ button {
 
   width: fit-content;
 
-  padding: 12px 20px;
+  padding: 12px 22px;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
 
   background: var(--primary);
   color: white;

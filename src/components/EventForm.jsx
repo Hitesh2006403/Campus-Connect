@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function toDateInputValue(date) {
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -63,7 +63,7 @@ function getFormData(eventToEdit) {
   };
 }
 
-function EventForm({ onAddEvent, onUpdateEvent, eventToEdit }) {
+function EventForm({ onAddEvent, onUpdateEvent, eventToEdit, onCancelEdit }) {
   const emptyForm = getFormData();
 
   const [formData, setFormData] = useState({
@@ -71,6 +71,11 @@ function EventForm({ onAddEvent, onUpdateEvent, eventToEdit }) {
   });
 
   const [formError, setFormError] = useState("");
+
+  useEffect(() => {
+    setFormData(getFormData(eventToEdit));
+    setFormError("");
+  }, [eventToEdit]);
 
   function handleChange(event) {
     const inputName = event.target.name;
@@ -105,6 +110,9 @@ function EventForm({ onAddEvent, onUpdateEvent, eventToEdit }) {
       try {
         if (eventToEdit) {
           await onUpdateEvent(eventData);
+          if (onCancelEdit) {
+            onCancelEdit();
+          }
         } else {
           await onAddEvent(eventData);
         }

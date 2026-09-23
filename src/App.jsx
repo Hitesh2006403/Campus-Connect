@@ -10,6 +10,10 @@ import AboutPage from "./pages/AboutPage";
 function App() {
     const [events, setEvents] = useState([]);
     const [eventError, setEventError] = useState("");
+    const [editingEventId, setEditingEventId] = useState(null);
+
+    const editingEvent =
+        events.find((event) => event.id === editingEventId) ?? null;
 
     async function fetchEvents() {
         const response = await fetch("http://localhost:5000/api/events");
@@ -57,6 +61,15 @@ function App() {
 
         setEvents(await fetchEvents());
         setEventError("");
+        setEditingEventId(null);
+    }
+
+    function handleStartEdit(eventId) {
+        setEditingEventId(eventId);
+    }
+
+    function handleCancelEdit() {
+        setEditingEventId(null);
     }
 
     function handleDeleteEvent(eventId) {
@@ -87,7 +100,11 @@ function App() {
                         <HomePage
                             events={events}
                             onAddEvent={handleAddEvent}
+                            onUpdateEvent={handleUpdateEvent}
                             onDeleteEvent={handleDeleteEvent}
+                            onStartEdit={handleStartEdit}
+                            editingEvent={editingEvent}
+                            onCancelEdit={handleCancelEdit}
                         />
                     }
                 />
@@ -99,6 +116,9 @@ function App() {
                             events={events}
                             onDeleteEvent={handleDeleteEvent}
                             onUpdateEvent={handleUpdateEvent}
+                            onStartEdit={handleStartEdit}
+                            editingEvent={editingEvent}
+                            onCancelEdit={handleCancelEdit}
                         />
                     }
                 />
