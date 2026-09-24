@@ -14,6 +14,40 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log("Connected to MongoDB");
+
+    const existingCount = await Event.countDocuments();
+    if (existingCount === 0) {
+      await Event.insertMany([
+        {
+          title: "MERN Stack Workshop",
+          category: "Technology",
+          date: "25 September 2026",
+          time: "10:00 AM",
+          location: "Computer Lab 1",
+          description:
+            "Learn the basics of MongoDB, Express, React, and Node.js through a practical workshop.",
+        },
+        {
+          title: "College Hackathon",
+          category: "Technology",
+          date: "28 September 2026",
+          time: "9:00 AM",
+          location: "Main Auditorium",
+          description:
+            "Form a team, solve a real problem, and present your solution to mentors.",
+        },
+        {
+          title: "Photography Club Meet",
+          category: "Club",
+          date: "30 September 2026",
+          time: "2:00 PM",
+          location: "Seminar Hall",
+          description:
+            "Meet fellow photography enthusiasts and learn basic composition techniques.",
+        },
+      ]);
+      console.log("Seeded default events into MongoDB.");
+    }
   })
   .catch((error) => {
     console.log("Error connecting to MongoDB:", error);
