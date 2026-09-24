@@ -6,7 +6,7 @@ function EventDetailsPage({ events, onUpdateEvent, isEditing = false }) {
     const navigate = useNavigate();
 
     const selectedEvent = events.find(function (event) {
-        return event.id === Number(eventId);
+        return String(event.id) === eventId;
     });
 
     if (selectedEvent === undefined) {
